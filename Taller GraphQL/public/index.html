@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GraphQL API - NestJS Todo App</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-width: 1200px;
+      width: 100%;
+      padding: 40px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      color: #667eea;
+      margin-bottom: 10px;
+      font-size: 2.5em;
+    }
+    
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+    }
+    
+    .card {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-left: 4px solid #667eea;
+    }
+    
+    .card h2 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 1.3em;
+    }
+    
+    .links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #667eea;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      text-align: center;
+      transition: all 0.3s;
+      font-weight: 600;
+    }
+    
+    .btn:hover {
+      background: #764ba2;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .btn-secondary {
+      background: #48bb78;
+    }
+    
+    .btn-secondary:hover {
+      background: #38a169;
+    }
+    
+    .features {
+      list-style: none;
+      margin-top: 15px;
+    }
+    
+    .features li {
+      padding: 8px 0;
+      color: #555;
+    }
+    
+    .features li:before {
+      content: "✓ ";
+      color: #48bb78;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+    
+    code {
+      background: #2d3748;
+      color: #68d391;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85em;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+    
+    code br {
+      display: block;
+      content: "";
+    }
+    
+    .status {
+      display: inline-block;
+      padding: 4px 12px;
+      background: #48bb78;
+      color: white;
+      border-radius: 20px;
+      font-size: 0.8em;
+      font-weight: 600;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+      
+      h1 {
+        font-size: 2em;
+      }
+      
+      code {
+        font-size: 0.75em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚀 GraphQL API</h1>
+    <p class="subtitle">NestJS + GraphQL + Prisma + PostgreSQL</p>
+    <span class="status">● En línea</span>
+    
+    <div class="card">
+      <h2>🎮 Herramientas Disponibles</h2>
+      <div class="links">
+        <a href="/graphql" class="btn" target="_blank">GraphQL Playground</a>
+        <a href="https://studio.apollographql.com/sandbox/explorer?endpoint=http://localhost:3000/graphql" class="btn btn-secondary" target="_blank">Apollo Sandbox</a>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h2>📚 Recursos de la API</h2>
+      <ul class="features">
+        <li><strong>Users:</strong> CRUD completo de usuarios</li>
+        <li><strong>Todos:</strong> Gestión de tareas por usuario</li>
+        <li><strong>Relaciones:</strong> Users ↔ Todos</li>
+        <li><strong>Mutations:</strong> Create, Update, Delete, Toggle</li>
+      </ul>
+    </div>
+    
+    <div class="card">
+      <h2>💡 Ejemplos de Queries</h2>
+      
+      <p style="margin-bottom: 10px;"><strong>1. Ver todos los usuarios:</strong></p>
+      <code style="display: block; padding: 10px; margin-bottom: 15px;">
+        query {<br>
+        &nbsp;&nbsp;users {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;id<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;name<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;email<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;createdAt<br>
+        &nbsp;&nbsp;}<br>
+        }
+      </code>
+      
+      <p style="margin-bottom: 10px;"><strong>2. Ver un usuario específico:</strong></p>
+      <code style="display: block; padding: 10px; margin-bottom: 15px;">
+        query {<br>
+        &nbsp;&nbsp;user(id: 1) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;id<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;name<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;email<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;todos {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;completed<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+        &nbsp;&nbsp;}<br>
+        }
+      </code>
+      
+      <p style="margin-bottom: 10px;"><strong>3. Ver todos los TODOs:</strong></p>
+      <code style="display: block; padding: 10px; margin-bottom: 15px;">
+        query {<br>
+        &nbsp;&nbsp;todos {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;id<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;title<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;description<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;completed<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;user {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+        &nbsp;&nbsp;}<br>
+        }
+      </code>
+      
+      <p style="margin-bottom: 10px;"><strong>4. Ver TODOs de un usuario:</strong></p>
+      <code style="display: block; padding: 10px; margin-bottom: 15px;">
+        query {<br>
+        &nbsp;&nbsp;todosByUser(userId: 1) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;id<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;title<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;completed<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;createdAt<br>
+        &nbsp;&nbsp;}<br>
+        }
+      </code>
+      
+      <p style="margin-bottom: 10px;"><strong>5. Ver un TODO específico:</strong></p>
+      <code style="display: block; padding: 10px;">
+        query {<br>
+        &nbsp;&nbsp;todo(id: 1) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;id<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;title<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;description<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;completed<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;user {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+        &nbsp;&nbsp;}<br>
+        }
+      </code>
+    </div>
+    
+    <div class="card">
+      <h2>🔧 Ejemplos de Mutations</h2>
+      
+      <p style="margin-bottom: 10px;"><strong>1. Crear un usuario:</strong></p>
+      <code style="display: block; padding: 10px; margin-bottom: 15px;">
+        mutation {<br>
+        &nbsp;&nbsp;createUser(createUserInput: {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;email: "juan@example.com"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;name: "Juan Pérez"<br>
+        &nbsp;&nbsp;}) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;id<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;email<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;name<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;createdAt<br>
+        &nbsp;&nbsp;}<br>
+        }
+      </code>
+      
+      <p style="margin-bottom: 10px;"><strong>2. Actualizar un usuario:</strong></p>
+      <code style="display: block; padding: 10px; margin-bottom: 15px;">
+        mutation {<br>
+        &nbsp;&nbsp;updateUser(updateUserInput: {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;id: 1<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;name: "Juan Actualizado"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;email: "nuevo@example.com"<br>
+        &nbsp;&nbsp;}) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;id<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;name<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;email<br>
+        &nbsp;&nbsp;}<br>
+        }
+      </code>
+      
+      <p style="margin-bottom: 10px;"><strong>3. Crear un TODO:</strong></p>
+      <code style="display: block; padding: 10px; margin-bottom: 15px;">
+        mutation {<br>
+        &nbsp;&nbsp;createTodo(createTodoInput: {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;title: "Completar proyecto"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;description: "Terminar el proyecto de GraphQL"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;userId: 1<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;completed: false<br>
+        &nbsp;&nbsp;}) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;id<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;title<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;completed<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;user {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+        &nbsp;&nbsp;}<br>
+        }
+      </code>
+      
+      <p style="margin-bottom: 10px;"><strong>4. Actualizar un TODO:</strong></p>
+      <code style="display: block; padding: 10px; margin-bottom: 15px;">
+        mutation {<br>
+        &nbsp;&nbsp;updateTodo(updateTodoInput: {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;id: 1<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;title: "Tarea actualizada"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;completed: true<br>
+        &nbsp;&nbsp;}) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;id<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;title<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;completed<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;updatedAt<br>
+        &nbsp;&nbsp;}<br>
+        }
+      </code>
+      
+      <p style="margin-bottom: 10px;"><strong>5. Marcar TODO como completado/incompleto (toggle):</strong></p>
+      <code style="display: block; padding: 10px; margin-bottom: 15px;">
+        mutation {<br>
+        &nbsp;&nbsp;toggleTodoCompleted(id: 1) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;id<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;title<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;completed<br>
+        &nbsp;&nbsp;}<br>
+        }
+      </code>
+      
+      <p style="margin-bottom: 10px;"><strong>6. Eliminar un TODO:</strong></p>
+      <code style="display: block; padding: 10px; margin-bottom: 15px;">
+        mutation {<br>
+        &nbsp;&nbsp;removeTodo(id: 1) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;id<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;title<br>
+        &nbsp;&nbsp;}<br>
+        }
+      </code>
+      
+      <p style="margin-bottom: 10px;"><strong>7. Eliminar un usuario:</strong></p>
+      <code style="display: block; padding: 10px;">
+        mutation {<br>
+        &nbsp;&nbsp;removeUser(id: 1) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;id<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;name<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;email<br>
+        &nbsp;&nbsp;}<br>
+        }
+      </code>
+    </div>
+    
+    <div class="card">
+      <h2>🔧 Endpoints</h2>
+      <ul class="features">
+        <li><strong>GraphQL:</strong> <code>http://localhost:3000/graphql</code></li>
+        <li><strong>Schema:</strong> Introspección habilitada</li>
+        <li><strong>CORS:</strong> Habilitado para desarrollo</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

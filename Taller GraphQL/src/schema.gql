@@ -1,0 +1,71 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateTodoInput {
+  completed: Boolean = false
+  description: String
+  title: String!
+  userId: Int!
+}
+
+input CreateUserInput {
+  email: String!
+  name: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  createTodo(createTodoInput: CreateTodoInput!): Todo!
+  createUser(createUserInput: CreateUserInput!): User!
+  removeTodo(id: Int!): Todo!
+  removeUser(id: Int!): User!
+  toggleTodoCompleted(id: Int!): Todo!
+  updateTodo(updateTodoInput: UpdateTodoInput!): Todo!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+}
+
+type Query {
+  todo(id: Int!): Todo!
+  todos: [Todo!]!
+  todosByUser(userId: Int!): [Todo!]!
+  user(id: Int!): User!
+  users: [User!]!
+}
+
+type Todo {
+  completed: Boolean!
+  createdAt: DateTime!
+  description: String
+  id: Int!
+  title: String!
+  updatedAt: DateTime!
+  user: User!
+  userId: Int!
+}
+
+input UpdateTodoInput {
+  completed: Boolean
+  description: String
+  id: Int!
+  title: String
+}
+
+input UpdateUserInput {
+  email: String
+  id: Int!
+  name: String
+}
+
+type User {
+  createdAt: DateTime!
+  email: String!
+  id: Int!
+  name: String
+  todos: [Todo!]
+  updatedAt: DateTime!
+}
